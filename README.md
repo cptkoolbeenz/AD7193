@@ -12,7 +12,7 @@ For more information please visit: https://www.analog.com/en/products/ad7193.htm
 [Arduino](https://www.arduino.cc/)<br>
 
 This library is tested with
-**Arduino IDE 1.8.13**
+**Arduino IDE 2.3.2**
 
 ## Installation
 Clone the repository to the Arduino libraries folder.
