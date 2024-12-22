@@ -242,7 +242,7 @@ void PRDC_AD7193::setFilter(uint32_t filter) {
   
   _filter = filter;
   
-  updateConf();
+  updateMode();
 }
 
 // enableNotchFilter() function
@@ -259,7 +259,7 @@ void PRDC_AD7193::enableNotchFilter(bool notch_state) {
     _notch_filter = AD7193_MODE_NO_REJ60;
   }
   
-  updateConf();
+  updateMode();
 }
 
 // enableChop() function
@@ -307,14 +307,37 @@ void PRDC_AD7193::updateConf(void) {
   uint32_t command = AD7193_CONF_CHAN(1 << _channel) | 
                     (_polarity * AD7193_CONF_UNIPOLAR) |
                     _gain |
-                    _filter |
-                    _notch_filter | 
                     _chop |
                     _buf |
                     _burnout; 
-                        
+  //Serial.printf("pol: %x\n", (_polarity * AD7193_CONF_UNIPOLAR));
+  //Serial.printf("ch: %x\n", AD7193_CONF_CHAN(1 << _channel));
+  //Serial.printf("gain: %x\n", _gain);
+  //Serial.printf("chop: %x\n", _chop);
+  //Serial.printf("buf: %x\n", _buf);
+  //Serial.printf("burn: %x\n", _burnout);
+					
+  //Serial.printf("Command: %d\n", command); 
   this->beginTransaction();
   this->setRegister(AD7193_REG_CONF, command, 3);
+  this->endTransaction();
+}
+
+// updateMode() function
+// Update mode register
+// --------------------
+void PRDC_AD7193::updateMode(void) {
+  #ifdef DEBUG_AD7193
+    Serial.println(F("updateMode()"));
+  #endif
+  
+uint32_t command =   _filter |
+					 _notch_filter |
+                     AD7193_MODE_CLKSRC(_clock_mode) |
+                     AD7193_MODE_RATE(_rate); 
+  
+  this->beginTransaction();
+  this->setRegister(AD7193_REG_MODE, command, 3);
   this->endTransaction();
 }
 

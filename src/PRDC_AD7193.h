@@ -214,5 +214,6 @@ class PRDC_AD7193 {
     void setRegister(uint8_t, uint32_t, uint8_t);
     void setSingleRegister(uint8_t, uint32_t, uint8_t);
     void updateConf(void);
+	void updateMode(void);
 };
 #endif // _PRDC_AD7193_H_
